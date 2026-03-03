@@ -1,0 +1,25 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "arduino-uno-v2",
+      "displayName": "Arduino Uno (IDE 2.x)",
+      "description": "Configuration dynamique (Portable)",
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "toolchainFile": "${sourceDir}/Toolchain-AVR.cmake",
+      "cacheVariables": {
+        "CMAKE_BUILD_TYPE": "Debug",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        
+        "ARDUINO_PACKAGES_ROOT": "$env{LOCALAPPDATA}/Arduino15/packages"
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "arduino-uno-v2",
+      "configurePreset": "arduino-uno-v2"
+    }
+  ]
+}
