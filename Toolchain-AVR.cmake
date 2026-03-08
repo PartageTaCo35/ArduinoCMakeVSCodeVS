@@ -1,64 +1,52 @@
 # Toolchain-AVR.cmake
-# Configuration dynamique, portable et auto-adaptative aux versions
+# Dynamic, portable, and version-adaptive configuration
 
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR avr)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
 # ----------------------------------------------------------------------------
-# 1. Récupération et Nettoyage de la Racine Arduino
+# 1. Arduino Packages Root Detection (Multi-OS)
 # ----------------------------------------------------------------------------
-if(NOT DEFINED ARDUINO_PACKAGES_ROOT)
-    if(DEFINED ENV{LOCALAPPDATA})
+# If the variable is not defined by the user, or if it is left empty
+if(NOT DEFINED ARDUINO_PACKAGES_ROOT OR ARDUINO_PACKAGES_ROOT STREQUAL "")
+    if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
         set(ARDUINO_PACKAGES_ROOT "$ENV{LOCALAPPDATA}/Arduino15/packages")
+    elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
+        set(ARDUINO_PACKAGES_ROOT "$ENV{HOME}/.arduino15/packages")
+    elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "Darwin") # MacOS
+        set(ARDUINO_PACKAGES_ROOT "$ENV{HOME}/Library/Arduino15/packages")
     else()
-        message(FATAL_ERROR "Impossible de trouver ARDUINO_PACKAGES_ROOT. Vérifiez votre Preset.")
+        message(FATAL_ERROR "Unrecognized operating system. Please define ARDUINO_PACKAGES_ROOT manually.")
     endif()
 endif()
 
-# Conversion des backslashes Windows (\) en slashes CMake (/)
+# Safety check
+if(NOT EXISTS "${ARDUINO_PACKAGES_ROOT}")
+    message(FATAL_ERROR "Arduino folder not found at: ${ARDUINO_PACKAGES_ROOT}. Is the Arduino IDE installed?")
+endif()
+
+# Convert Windows backslashes (\) to CMake slashes (/)
 file(TO_CMAKE_PATH "${ARDUINO_PACKAGES_ROOT}" ARDUINO_PACKAGES_ROOT)
 
 # ----------------------------------------------------------------------------
-# 2. Auto-Détection des Versions (Le Cœur du Fix)
+# 2. Dynamic Version Detection
 # ----------------------------------------------------------------------------
 
-# A. Détection du Compilateur (avr-gcc)
-# On cherche les dossiers dans tools/avr-gcc/ et on prend le dernier (le plus récent)
+# A. Compiler Detection (avr-gcc)
 file(GLOB GCC_DIRS "${ARDUINO_PACKAGES_ROOT}/arduino/tools/avr-gcc/*")
 list(SORT GCC_DIRS)
 list(REVERSE GCC_DIRS)
 list(GET GCC_DIRS 0 GCC_DIR_FOUND)
-get_filename_component(AVR_GCC_VERSION "${GCC_DIR_FOUND}" NAME)
 
-if(NOT AVR_GCC_VERSION)
-    message(FATAL_ERROR "Compilateur avr-gcc introuvable dans ${ARDUINO_PACKAGES_ROOT}/arduino/tools/avr-gcc/")
+if(NOT GCC_DIR_FOUND)
+    message(FATAL_ERROR "avr-gcc compiler not found in ${ARDUINO_PACKAGES_ROOT}/arduino/tools/avr-gcc/")
 endif()
 
-message(STATUS "Auto-detected AVR GCC: ${AVR_GCC_VERSION}")
-
-# B. Détection du Core (hardware/avr)
-# On cherche les dossiers dans hardware/avr/ et on prend le dernier (ex: 1.8.7)
-file(GLOB CORE_DIRS "${ARDUINO_PACKAGES_ROOT}/arduino/hardware/avr/*")
-list(SORT CORE_DIRS)
-list(REVERSE CORE_DIRS)
-list(GET CORE_DIRS 0 CORE_DIR_FOUND)
-get_filename_component(AVR_CORE_VERSION "${CORE_DIR_FOUND}" NAME)
-
-if(NOT AVR_CORE_VERSION)
-    message(FATAL_ERROR "Arduino AVR Core introuvable dans ${ARDUINO_PACKAGES_ROOT}/arduino/hardware/avr/")
-endif()
-
-message(STATUS "Auto-detected AVR Core: ${AVR_CORE_VERSION}")
+set(AVR_TOOLCHAIN_ROOT "${GCC_DIR_FOUND}")
 
 # ----------------------------------------------------------------------------
-# 3. Construction des Chemins Absolus
-# ----------------------------------------------------------------------------
-set(AVR_TOOLCHAIN_ROOT "${ARDUINO_PACKAGES_ROOT}/arduino/tools/avr-gcc/${AVR_GCC_VERSION}")
-set(ARDUINO_CORE_ROOT  "${ARDUINO_PACKAGES_ROOT}/arduino/hardware/avr/${AVR_CORE_VERSION}")
-
-# ----------------------------------------------------------------------------
-# 4. Configuration des Outils
+# 3. Toolchain Executables Definition
 # ----------------------------------------------------------------------------
 set(CMAKE_C_COMPILER   "${AVR_TOOLCHAIN_ROOT}/bin/avr-gcc.exe")
 set(CMAKE_CXX_COMPILER "${AVR_TOOLCHAIN_ROOT}/bin/avr-g++.exe")
@@ -68,7 +56,7 @@ set(CMAKE_OBJCOPY      "${AVR_TOOLCHAIN_ROOT}/bin/avr-objcopy.exe")
 set(CMAKE_OBJDUMP      "${AVR_TOOLCHAIN_ROOT}/bin/avr-objdump.exe")
 set(CMAKE_SIZE         "${AVR_TOOLCHAIN_ROOT}/bin/avr-size.exe")
 
-# Recherche dynamique d'AVRDUDE (Même logique)
+# Dynamic AVRDUDE search
 file(GLOB AVRDUDE_DIRS "${ARDUINO_PACKAGES_ROOT}/arduino/tools/avrdude/*")
 list(SORT AVRDUDE_DIRS)
 list(REVERSE AVRDUDE_DIRS)
@@ -78,18 +66,5 @@ if(AVRDUDE_DIR_FOUND)
     set(AVRDUDE_EXECUTABLE "${AVRDUDE_DIR_FOUND}/bin/avrdude.exe")
     set(AVRDUDE_CONF       "${AVRDUDE_DIR_FOUND}/etc/avrdude.conf")
 else()
-    message(WARNING "Avrdude introuvable.")
+    message(WARNING "Avrdude not found. Flashing might not work.")
 endif()
-
-# ----------------------------------------------------------------------------
-# 5. Flags de Compilation
-# ----------------------------------------------------------------------------
-set(MCU "atmega328p" CACHE STRING "Microcontrôleur cible")
-set(F_CPU 16000000)
-
-set(COMMON_FLAGS "-mmcu=${MCU} -DF_CPU=${F_CPU}UL -Os -w -ffunction-sections -fdata-sections")
-
-set(CMAKE_C_FLAGS_INIT   "${COMMON_FLAGS} -std=gnu11")
-set(CMAKE_CXX_FLAGS_INIT "${COMMON_FLAGS} -std=gnu++11 -fno-threadsafe-statics -fpermissive -fno-exceptions")
-set(CMAKE_ASM_FLAGS_INIT "${COMMON_FLAGS}")
-set(CMAKE_EXE_LINKER_FLAGS_INIT "-mmcu=${MCU} -Wl,--gc-sections -fuse-linker-plugin")

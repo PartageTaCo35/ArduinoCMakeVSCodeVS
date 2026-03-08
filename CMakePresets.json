@@ -12,7 +12,7 @@
         "CMAKE_BUILD_TYPE": "Debug",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
         
-        "ARDUINO_PACKAGES_ROOT": "$env{LOCALAPPDATA}/Arduino15/packages"
+        "ARDUINO_PACKAGES_ROOT": ""
       }
     }
   ],

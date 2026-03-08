@@ -36,6 +36,8 @@ If you don't create it, the project defaults to Arduino Uno settings.
 }
 ```
 
+Please read if needed the file **BOARD_CONFIG_EN.md** .
+
 ## 3. Flexibility and Operating Modes
 The framework automatically detects and adapts to your workflow through four modes:
   - **Arduino Mode**:  Use only ```.ino``` files. The framework automatically injects ```Arduino.h``` for you.

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15)
 
-# Configuration Système (doit être avant project)
+# System Configuration (must be defined before project)
 set(CMAKE_SYSTEM_NAME Generic)
 set(CMAKE_SYSTEM_PROCESSOR avr)
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
@@ -12,27 +12,27 @@ project(AVR_Arduino_Project LANGUAGES C CXX ASM)
 
 set(PROJECT_NAME "avr_app")
 
-# Définition du MCU (Sera utilisé par Arduino.cmake)
+# MCU Definition (Will be used by Arduino.cmake as a fallback)
 set(MCU "atmega328p")
 
 # ----------------------------------------------------------------------------
-# Importation du Framework Arduino
+# Arduino Framework Import
 # ----------------------------------------------------------------------------
-# On inclut notre module qui gère tout
+# Include our core module that handles the build process
 include("cmake/Arduino.cmake")
 
 # ----------------------------------------------------------------------------
-# Création de l'Application
+# Application Creation
 # ----------------------------------------------------------------------------
-# Appel de notre super-fonction. 
-# Arg 1 : Nom de l'exécutable
-# Arg 2 : Dossier où chercher les sources (Ici ".", la racine)
+# Call our main setup function. 
+# Arg 1: Executable target name
+# Arg 2: Source directory (Here ".", the root)
 
-# 1. Création de l'application
-arduino_add_executable(${PROJECT_NAME}  "${CMAKE_CURRENT_SOURCE_DIR}")
+# 1. Create the application target
+arduino_add_executable(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}")
 
-# 2. Ajout des libs externes
-arduino_link_libraries(${PROJECT_NAME}  Wire)
+# 2. Link external Arduino libraries (uncomment to use)
+#arduino_link_libraries(${PROJECT_NAME} Wire)
 
-# 3. Activation de la documentation !
-arduino_enable_doxygen(${PROJECT_NAME}  "${CMAKE_CURRENT_SOURCE_DIR}")
+# 3. Enable Doxygen documentation generation!
+arduino_enable_doxygen(${PROJECT_NAME} "${CMAKE_CURRENT_SOURCE_DIR}")

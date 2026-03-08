@@ -36,6 +36,8 @@ Si vous ne le créez pas, le projet utilise par défaut les réglages d'un Ardui
 }
 ```
 
+Lisez au besoin le fichier **BOARD_CONFIG_FR.md** .
+
 ## 3. Flexibilité et Modes de fonctionnement
 Le framework s'adapte à votre manière de travailler selon quatre modes détectés automatiquement :
   - **Mode Arduino** : Utilisez uniquement des fichiers ```.ino```. Le framework injecte automatiquement ```Arduino.h``` pour vous.
