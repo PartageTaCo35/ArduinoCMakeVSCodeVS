@@ -2,12 +2,29 @@
 # Arduino Framework for CMake - Modular Architecture
 
 # ----------------------------------------------------------------------------
-# Global Configuration
+# Global Configuration & Dynamic Core Detection
 # ----------------------------------------------------------------------------
-if(NOT DEFINED ARDUINO_CORE_ROOT)
-    message(FATAL_ERROR "ARDUINO_CORE_ROOT is missing. Check your Presets.")
+
+# 1. Ensure the base packages directory is known
+if(NOT DEFINED ARDUINO_PACKAGES_ROOT)
+    message(FATAL_ERROR "ARDUINO_PACKAGES_ROOT is missing. Toolchain might not be loaded.")
 endif()
 
+# 2. Dynamically find the latest AVR core version
+if(NOT DEFINED ARDUINO_CORE_ROOT)
+    file(GLOB CORE_DIRS "${ARDUINO_PACKAGES_ROOT}/arduino/hardware/avr/*")
+    list(SORT CORE_DIRS)
+    list(REVERSE CORE_DIRS)
+    list(GET CORE_DIRS 0 CORE_DIR_FOUND)
+
+    if(NOT CORE_DIR_FOUND)
+        message(FATAL_ERROR "Arduino AVR Core not found in ${ARDUINO_PACKAGES_ROOT}/arduino/hardware/avr/")
+    endif()
+
+    set(ARDUINO_CORE_ROOT "${CORE_DIR_FOUND}")
+endif()
+
+# 3. Define paths to internal core components
 set(ARDUINO_CORE_PATH     "${ARDUINO_CORE_ROOT}/cores/arduino")
 set(ARDUINO_VARIANT_PATH  "${ARDUINO_CORE_ROOT}/variants/standard")
 set(ARDUINO_LIBRARIES_DIR "${ARDUINO_CORE_ROOT}/libraries")
@@ -173,6 +190,20 @@ function(_arduino_prepare_core HAS_USER_MAIN DEFINES F_CPU)
             ${DEFINES}
             F_CPU=${F_CPU}
         )
+
+        # Applies MCU flag and optimization options for the Core
+        target_compile_options(ArduinoCore PRIVATE
+            -mmcu=${MCU}
+            -Os
+            -ffunction-sections
+            -fdata-sections
+        )
+        
+        # Sets clock frequency and Arduino ecosystem definitions
+        target_compile_definitions(ArduinoCore PUBLIC 
+            F_CPU=${F_CPU} 
+            ${ARDUINO_DEFINES}
+        )
     endif()
 endfunction()
 
@@ -207,6 +238,16 @@ function(_arduino_setup_target TARGET_NAME SOURCES IS_ARDUINO INO_FILES SOURCE_D
             set_property(SOURCE ${INO_FILE} APPEND PROPERTY COMPILE_OPTIONS "-x" "c++" "-include" "Arduino.h")
         endforeach()
     endif()
+
+    # Informs the compiler about the target architecture
+    target_compile_options(${TARGET_NAME}.elf PRIVATE
+        -mmcu=${MCU}
+    )
+
+    # Informs the linker about the target architecture
+    target_link_options(${TARGET_NAME}.elf PRIVATE
+        -mmcu=${MCU}
+    )
 endfunction()
 
 
