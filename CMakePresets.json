@@ -6,13 +6,18 @@
       "displayName": "Arduino Uno (IDE 2.x)",
       "description": "Configuration dynamique (Portable)",
       "generator": "Ninja",
+      "intelliSenseMode": "windows-gcc-arm",
       "binaryDir": "${sourceDir}/out/build/${presetName}",
       "toolchainFile": "${sourceDir}/Toolchain-AVR.cmake",
       "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug",
-        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        
+        "CMAKE_BUILD_TYPE": "Release",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",        
         "ARDUINO_PACKAGES_ROOT": ""
+        },
+      "vendor": {
+        "microsoft.com/VisualStudioSettings/CMake/1.0": {
+          "intelliSenseMode": "linux-gcc-arm"
+        }
       }
     }
   ],

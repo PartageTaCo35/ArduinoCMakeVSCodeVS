@@ -38,7 +38,6 @@ file(GLOB GCC_DIRS "${ARDUINO_PACKAGES_ROOT}/arduino/tools/avr-gcc/*")
 list(SORT GCC_DIRS)
 list(REVERSE GCC_DIRS)
 list(GET GCC_DIRS 0 GCC_DIR_FOUND)
-
 if(NOT GCC_DIR_FOUND)
     message(FATAL_ERROR "avr-gcc compiler not found in ${ARDUINO_PACKAGES_ROOT}/arduino/tools/avr-gcc/")
 endif()
@@ -48,13 +47,21 @@ set(AVR_TOOLCHAIN_ROOT "${GCC_DIR_FOUND}")
 # ----------------------------------------------------------------------------
 # 3. Toolchain Executables Definition
 # ----------------------------------------------------------------------------
-set(CMAKE_C_COMPILER   "${AVR_TOOLCHAIN_ROOT}/bin/avr-gcc.exe")
-set(CMAKE_CXX_COMPILER "${AVR_TOOLCHAIN_ROOT}/bin/avr-g++.exe")
-set(CMAKE_ASM_COMPILER "${AVR_TOOLCHAIN_ROOT}/bin/avr-gcc.exe")
 
-set(CMAKE_OBJCOPY      "${AVR_TOOLCHAIN_ROOT}/bin/avr-objcopy.exe")
-set(CMAKE_OBJDUMP      "${AVR_TOOLCHAIN_ROOT}/bin/avr-objdump.exe")
-set(CMAKE_SIZE         "${AVR_TOOLCHAIN_ROOT}/bin/avr-size.exe")
+# Determine the native executable suffix based on the host OS
+set(EXEC_EXT "")
+if(CMAKE_HOST_WIN32)
+    set(EXEC_EXT ".exe")
+endif()
+
+# Force visibility in the CMake Cache for Visual Studio IntelliSense
+set(CMAKE_C_COMPILER   "${AVR_TOOLCHAIN_ROOT}/bin/avr-gcc${EXEC_EXT}"     CACHE FILEPATH "C Compiler"   FORCE)
+set(CMAKE_CXX_COMPILER "${AVR_TOOLCHAIN_ROOT}/bin/avr-g++${EXEC_EXT}"     CACHE FILEPATH "CXX Compiler" FORCE)
+set(CMAKE_ASM_COMPILER "${AVR_TOOLCHAIN_ROOT}/bin/avr-gcc${EXEC_EXT}"     CACHE FILEPATH "ASM Compiler" FORCE)
+
+set(CMAKE_OBJCOPY      "${AVR_TOOLCHAIN_ROOT}/bin/avr-objcopy${EXEC_EXT}" CACHE FILEPATH "Objcopy" FORCE)
+set(CMAKE_OBJDUMP      "${AVR_TOOLCHAIN_ROOT}/bin/avr-objdump${EXEC_EXT}" CACHE FILEPATH "Objdump" FORCE)
+set(CMAKE_SIZE         "${AVR_TOOLCHAIN_ROOT}/bin/avr-size${EXEC_EXT}"    CACHE FILEPATH "Size"    FORCE)
 
 # Dynamic AVRDUDE search
 file(GLOB AVRDUDE_DIRS "${ARDUINO_PACKAGES_ROOT}/arduino/tools/avrdude/*")
@@ -63,7 +70,7 @@ list(REVERSE AVRDUDE_DIRS)
 list(GET AVRDUDE_DIRS 0 AVRDUDE_DIR_FOUND)
 
 if(AVRDUDE_DIR_FOUND)
-    set(AVRDUDE_EXECUTABLE "${AVRDUDE_DIR_FOUND}/bin/avrdude.exe")
+    set(AVRDUDE_EXECUTABLE "${AVRDUDE_DIR_FOUND}/bin/avrdude${EXEC_EXT}")
     set(AVRDUDE_CONF       "${AVRDUDE_DIR_FOUND}/etc/avrdude.conf")
 else()
     message(WARNING "Avrdude not found. Flashing might not work.")
