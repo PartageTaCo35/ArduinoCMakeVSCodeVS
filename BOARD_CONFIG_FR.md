@@ -28,6 +28,7 @@ Copiez-collez simplement le bloc correspondant dans votre fichier `board.json` e
 {
   "board": "uno",
   "mcu": "atmega328p",
+  "variant": "standard",
   "f_cpu": "16000000UL",
   "upload_port": "COM3",
   "upload_baud": "115200",
@@ -46,9 +47,10 @@ Note : Très courant sur les clones chinois.
 {
   "board": "nano",
   "mcu": "atmega328p",
+  "variant": "eightanaloginputs",
   "f_cpu": "16000000UL",
   "upload_port": "COM4",
-  "upload_baud": "57600",
+  "upload_baud": "115200",
   "programmer": "arduino",
   "defines": [
     "ARDUINO=10819",
@@ -63,6 +65,7 @@ Note : Très courant sur les clones chinois.
 {
   "board": "mega",
   "mcu": "atmega2560",
+  "variant": "mega",
   "f_cpu": "16000000UL",
   "upload_port": "COM5",
   "upload_baud": "115200",
@@ -74,6 +77,7 @@ Note : Très courant sur les clones chinois.
   ]
 }
 ```
+
 ## 🔍 Comment trouver les paramètres pour une carte exotique ?
 Si votre carte ne figure pas dans la liste ci-dessus, voici l'astuce imparable pour trouver les bonnes valeurs :
   1. Ouvrez l'IDE Arduino officiel.
@@ -89,3 +93,9 @@ Si votre carte ne figure pas dans la liste ci-dessus, voici l'astuce imparable p
 	 
 ## Attention
 Les **ESP32**, **RISCV**, carte basé sur **ARM** ne sont pas des carte utilisant AVR et donc AVR-GCC.
+
+## ⚠️ Note importante sur la configuration
+Toute modification apportée au fichier `board.json` (changement de port, de MCU ou de flags) n'est pas prise en compte instantanément par le système de build. 
+
+Pour que vos changements soient correctement propagés dans le projet, vous devez **régénérer le cache CMake** de votre IDE (généralement via la commande "Delete Cache and Reconfigure" ou "Reload CMake Project").
+Cette étape est nécessaire pour garantir que les nouvelles définitions matérielles soient bien transmises au compilateur.

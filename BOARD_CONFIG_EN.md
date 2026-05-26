@@ -23,11 +23,14 @@ Here is the list of parameters expected in the file:
 Here are standard configurations for the most common boards.
 Simply copy and paste the corresponding block into your `board.json` file and adapt the `upload_port`.
 
+
+
 ### 1. Arduino Uno (Default)
 ```json
 {
   "board": "uno",
   "mcu": "atmega328p",
+  "variant": "standard",
   "f_cpu": "16000000UL",
   "upload_port": "COM3",
   "upload_baud": "115200",
@@ -40,36 +43,20 @@ Simply copy and paste the corresponding block into your `board.json` file and ad
 }
 ```
 
-### 1. Arduino Uno (Default)
-```json
-{
-  "board": "nano",
-  "mcu": "atmega328p",
-  "f_cpu": "16000000UL",
-  "upload_port": "COM4",
-  "upload_baud": "57600",
-  "programmer": "arduino",
-  "defines": [
-    "ARDUINO=10819",
-    "ARDUINO_AVR_NANO",
-    "ARDUINO_ARCH_AVR"
-  ]
-}
-```
-
 ### 2. Arduino Nano (Old Bootloader)
 Note: Very common on Chinese clones.
 ```json
 {
-  "board": "mega",
-  "mcu": "atmega2560",
+  "board": "nano",
+  "mcu": "atmega328p",
+  "variant": "eightanaloginputs",
   "f_cpu": "16000000UL",
-  "upload_port": "COM5",
+  "upload_port": "COM4",
   "upload_baud": "115200",
-  "programmer": "wiring",
+  "programmer": "arduino",
   "defines": [
     "ARDUINO=10819",
-    "ARDUINO_AVR_MEGA2560",
+    "ARDUINO_AVR_NANO",
     "ARDUINO_ARCH_AVR"
   ]
 }
@@ -80,6 +67,7 @@ Note: Very common on Chinese clones.
 {
   "board": "mega",
   "mcu": "atmega2560",
+  "variant": "mega",
   "f_cpu": "16000000UL",
   "upload_port": "COM5",
   "upload_baud": "115200",
@@ -91,6 +79,7 @@ Note: Very common on Chinese clones.
   ]
 }
 ```
+
 ## 🔍 How to find the settings for an exotic board?
 If your board is not in the list above, here's a foolproof trick to find the correct values:
   1. Open the official **Arduino IDE**.
@@ -107,3 +96,9 @@ If your board is not in the list above, here's a foolproof trick to find the cor
 ⚠️ Attention
 **ESP32**, **RISC-V**, and **ARM**-based boards are not AVR-based boards and therefore do not use AVR-GCC.
 Please adapts yourself the logic for this type of boards.
+
+## ⚠️ Important note on configuration
+Any changes made to the `board.json` file (e.g., updating port, MCU, or flags) are not automatically applied to the build system.
+
+To ensure your changes are correctly propagated throughout the project, you must **regenerate the CMake cache** in your IDE (usually via the "Delete Cache and Reconfigure" or "Reload CMake Project" command).
+This step is essential to ensure that the new hardware definitions are correctly passed to the compiler.

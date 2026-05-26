@@ -56,7 +56,7 @@ Chaque fichier `.cmake` a un rôle unique et défini, évitant ainsi un `CMakeLi
 * Le `CMakeLists.txt` racine ne fait que déclarer le projet et appeler le framework.
 * Le fichier `Toolchain-AVR.cmake` ne fait *que* configurer le compilateur croisé.
 * Le fichier `Arduino.cmake` agit comme un chef d'orchestre : il inclut les sous-modules et expose l'API publique.
-* Le fichier `ArduinoHelper.cmake` factorise eles parties de code communes et isole toute la machinerie complexe (expressions régulières, parcours de dossiers), garantissant que les autres modules ne fassent *que* de la déclaration de cibles.
+* Le fichier `ArduinoHelper.cmake` factorise les parties de code communes et isole toute la machinerie complexe (expressions régulières, parcours de dossiers), garantissant que les autres modules ne fassent *que* de la déclaration de cibles.
 
 ### 3. Encapsulation et Résilience (`ArduinoHelper.cmake`)
 

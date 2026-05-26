@@ -55,7 +55,7 @@ Each `.cmake` file has a unique and clearly defined role, thereby preventing a m
 * The root `CMakeLists.txt` only declares the project and calls the framework.
 * The `Toolchain-AVR.cmake` file does *nothing but* configure the cross-compiler.
 * The `Arduino.cmake` file acts as the conductor: it includes the submodules and exposes the public API.
-* The `ArduinoHelper.cmake` foctories commun code part and file isolates all the complex machinery (regular expressions, directory parsing), ensuring that the other modules *only* handle target declarations.
+* The `ArduinoHelper.cmake` factories common code parts and file isolates all the complex machinery (regular expressions, directory parsing), ensuring that the other modules *only* handle target declarations.
 
 ### 3. Encapsulation and Resilience (`ArduinoHelper.cmake`)
 
