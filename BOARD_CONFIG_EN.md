@@ -51,7 +51,7 @@ Note: Very common on Chinese clones.
   "mcu": "atmega328p",
   "variant": "eightanaloginputs",
   "f_cpu": "16000000UL",
-  "upload_port": "COM4",
+  "upload_port": "COM3",
   "upload_baud": "115200",
   "programmer": "arduino",
   "defines": [
@@ -69,7 +69,7 @@ Note: Very common on Chinese clones.
   "mcu": "atmega2560",
   "variant": "mega",
   "f_cpu": "16000000UL",
-  "upload_port": "COM5",
+  "upload_port": "COM3",
   "upload_baud": "115200",
   "programmer": "wiring",
   "defines": [
@@ -88,7 +88,7 @@ If your board is not in the list above, here's a foolproof trick to find the cor
   4. In the black console at the bottom, look for the long avr-gcc command line:
      - Look for the `-mmcu= parameter` (this will give you the `mcu`).
      - Look for the `-DF_CPU= parameter` (this will give you the `f_cpu`).
-     - Look for the `-DARDUINO_AVR_...` parameters (this will give you the defines).
+     - Look for the `-DARDUINO_AVR_...` parameters (this will give you the `defines`).
   5. Look for the line starting with avrdude during the upload:
      - The `-c` parameter gives you the programmer.
      - The `-b` parameter gives you the upload_baud.

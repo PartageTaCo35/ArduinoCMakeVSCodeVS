@@ -2,7 +2,7 @@
 Marre de l'IDE Arduino classique ? Utilisez la puissance de **Visual Studio 2026** ou **VS Code** et **CMake** pour développer sur AVR (Uno, Nano, etc.) avec un environnement de qualité professionnel mais accessible aux hobbyists, tout en gardant vos habitudes Arduino.
 
 ## 1. Démarrage Rapide
-  - Copier ou cloner le dépôt.
+  - Copier ou cloner le dépôt. `git clone https://github.com/PartageTaCo35/ArduinoCMakeVSCodeVS.git`
   - **Ajouter vos sources** et sous-répertoires de sources à la racine.
   - Personnaliser au besoin le fichier CMakeLists.txt fourni à la racine.
   - Configurer votre carte dans le fichier board.json.
@@ -54,7 +54,7 @@ Le framework s'appuie sur l'écosystème officiel. Pour ajouter une nouvelle bib
   - Relancez simplement la configuration CMake dans votre IDE professionnel. Le projet détectera automatiquement les nouveaux composants.
 
 ### Points forts
-  - **Bibliothèques facilitées :** Pour ajouter ```Wire``` ou ```SPI```, il suffit d'une ligne dans votre CMake : ```arduino_link_libraries(votre_app Wire SPI)```.
+  - **Bibliothèques facilitées :** Pour ajouter ```Wire``` ou ```SPI```, il suffit d'une ligne dans votre CMake, respectively: ```arduino_link_libraries(your_app Wire)```, ```arduino_link_libraries(your_app SPI)``` ou ```arduino_link_libraries(your_app Wire SPI)``` pour les deux.
   - **Code ultra-léger :**         Le système supprime automatiquement le code inutile et optimise la taille finale (LTO) pour que vos programmes rentrent dans les plus petits microcontrôleurs.
   - **Organisation propre :**      Vos dossiers et fichiers d'en-tête (```.h```) s'affichent correctement dans l'arborescence de votre IDE, facilitant la navigation.
   - **Astuce Coloration :**        Configurez votre IDE pour qu'il applique la coloration syntaxique du C++ aux fichiers ```.ino``` afin de bénéficier de l'auto-complétion complète. 😉

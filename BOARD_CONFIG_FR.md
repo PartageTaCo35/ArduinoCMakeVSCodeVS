@@ -49,7 +49,7 @@ Note : Très courant sur les clones chinois.
   "mcu": "atmega328p",
   "variant": "eightanaloginputs",
   "f_cpu": "16000000UL",
-  "upload_port": "COM4",
+  "upload_port": "COM3",
   "upload_baud": "115200",
   "programmer": "arduino",
   "defines": [
@@ -67,7 +67,7 @@ Note : Très courant sur les clones chinois.
   "mcu": "atmega2560",
   "variant": "mega",
   "f_cpu": "16000000UL",
-  "upload_port": "COM5",
+  "upload_port": "COM3",
   "upload_baud": "115200",
   "programmer": "wiring",
   "defines": [
@@ -84,7 +84,7 @@ Si votre carte ne figure pas dans la liste ci-dessus, voici l'astuce imparable p
   2. Allez dans Fichier > Préférences, et cochez la case **"Afficher les résultats détaillés pendant la compilation et le téléversement"**.
   3. Sélectionnez votre carte et son port, puis compilez et téléversez un programme vide (**Blink**).
   4. Dans la console noire en bas, cherchez la longue ligne de commande **avr-gcc** :
-     - Cherchez le paramètre `-mmcu=` (cela vous donnera le mcu).
+     - Cherchez le paramètre `-mmcu=` (cela vous donnera le `mcu`).
      - Cherchez le paramètre `-DF_CPU=` (cela vous donnera le `f_cpu`).
      - Cherchez les `-DARDUINO_AVR_...` (cela vous donnera les `defines`).
   5. Cherchez la ligne commençant par avrdude lors du téléversement :

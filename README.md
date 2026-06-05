@@ -2,7 +2,7 @@
 Tired of the classic Arduino IDE? Harness the power of **Visual Studio 2026** or **VS Code** and **CMake** to develop for AVR (Uno, Nano, etc.) with a professional-grade environment that remains accessible to hobbyists, all while keeping your Arduino habits.
 
 ## 1. Quick Start
-  - Clone or copy the repository.
+  - Clone or copy the repository. `git clone https://github.com/PartageTaCo35/ArduinoCMakeVSCodeVS.git`
   - **Add your sources** and source subdirectories to the root folder.
   - Customize the provided CMakeLists.txt at the root as needed.
   - Configure your board in the board.json file.
@@ -36,7 +36,7 @@ If you don't create it, the project defaults to Arduino Uno settings.
 }
 ```
 
-Please read if needed the file **BOARD_CONFIG_EN.md** .
+Details about board configuration found in **BOARD_CONFIG_EN.md** .
 
 ## 3. Flexibility and Operating Modes
 The framework automatically detects and adapts to your workflow through four modes:
@@ -54,7 +54,7 @@ The framework relies on the official ecosystem. To add a new library or board:
   - Simply restart the CMake configuration in your professional IDE; it will automatically detect the new components.
   
 ### Highlights
-  - **Simplified Libraries:** To add ```Wire``` or ```SPI```, just add a single line to your CMake: ```arduino_link_libraries(your_app Wire SPI)```.
+  - **Simplified Libraries:** To add ```Wire``` or ```SPI```, just add a single line to your CMake, respectively: ```arduino_link_libraries(your_app Wire)```, ```arduino_link_libraries(your_app SPI)``` or ```arduino_link_libraries(your_app Wire SPI)``` for both.
   - **Ultra-light Code:**     The system automatically removes unused code and optimizes the final size (LTO) to ensure your programs fit into the smallest microcontrollers.
   - **Clean Organization:**   Your folders and header files (```.h```) are correctly displayed in your IDE's tree structure for easy navigation.
   - **Syntax Highlighting Tip:** Configure your IDE to apply C++ syntax highlighting to ```.ino``` files to benefit from full auto-completion 😉.

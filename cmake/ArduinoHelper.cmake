@@ -93,14 +93,18 @@ function(_arduino_load_config JSON_FILE)
     endif()
 
     # Export configuration variables to CMake Cache so they are globally available
-    set(JSON_BOARD          "${JSON_BOARD}"          CACHE STRING "Arduino Board Type" FORCE)
-    set(JSON_VARIANT        "${JSON_VARIANT}"        CACHE STRING "Arduino Variant"    FORCE)
-    set(JSON_MCU            "${JSON_MCU}"            CACHE STRING "Target MCU"         FORCE)
-    set(JSON_F_CPU          "${JSON_F_CPU}"          CACHE STRING "CPU Frequency"      FORCE)
-    set(JSON_PORT           "${JSON_PORT}"           CACHE STRING "Upload Port"        FORCE)
-    set(JSON_BAUD           "${JSON_BAUD}"           CACHE STRING "Upload Baud Rate"   FORCE)
-    set(JSON_PROGRAMMER     "${JSON_PROGRAMMER}"     CACHE STRING "Upload Programmer"  FORCE)
-    set(JSON_DEFINES        "${CMAKE_DEFINES}"       CACHE STRING "Compile Defines"    FORCE)
+    set(JSON_BOARD      ERROR_VARIABLE JSON_ERROR "${JSON_BOARD}"          CACHE STRING "Arduino Board Type" FORCE)
+    set(JSON_VARIANT    ERROR_VARIABLE JSON_ERROR "${JSON_VARIANT}"        CACHE STRING "Arduino Variant"    FORCE)
+    set(JSON_MCU        ERROR_VARIABLE JSON_ERROR "${JSON_MCU}"            CACHE STRING "Target MCU"         FORCE)
+    set(JSON_F_CPU      ERROR_VARIABLE JSON_ERROR "${JSON_F_CPU}"          CACHE STRING "CPU Frequency"      FORCE)
+    set(JSON_PORT       ERROR_VARIABLE JSON_ERROR "${JSON_PORT}"           CACHE STRING "Upload Port"        FORCE)
+    set(JSON_BAUD       ERROR_VARIABLE JSON_ERROR "${JSON_BAUD}"           CACHE STRING "Upload Baud Rate"   FORCE)
+    set(JSON_PROGRAMMER ERROR_VARIABLE JSON_ERROR "${JSON_PROGRAMMER}"     CACHE STRING "Upload Programmer"  FORCE)
+    set(JSON_DEFINES    ERROR_VARIABLE JSON_ERROR "${CMAKE_DEFINES}"       CACHE STRING "Compile Defines"    FORCE)
+
+    if(JSON_ERROR)
+        message(FATAL_ERROR "Error parsing JSON configuration: ${JSON_ERROR}")
+    endif()
 endfunction()
 
 # Extracts standard include directories for the AVR toolchain
@@ -196,7 +200,7 @@ function(_arduino_gather_sources OUT_SOURCES_VAR SOURCE_DIRS)
 endfunction()
 
 # Dispatch sources into IDE-specific virtual folders if needed
-function(_arduino_scpecific_dispatcher)
+function(_arduino_specific_dispatcher)
     # Force IDEs (like Visual Studio) to group external framework files into a virtual folder
     # This prevents the IDE tree from going all the way up to the user's home directory
     source_group("Arduino Framework" REGULAR_EXPRESSION ".*packages/arduino/.*")

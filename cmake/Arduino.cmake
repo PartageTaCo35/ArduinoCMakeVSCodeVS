@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # GLOBAL CONFIGURATION & INITIALIZATION
 # ----------------------------------------------------------------------------
 # Allow the user to specify a custom path for board.json, default to current source dir
-if(NOT DEFINED ARDUINO_BOARD_JSON_PATH)
+if(NOT ARDUINO_BOARD_JSON_PATH)
     set(ARDUINO_BOARD_JSON_PATH "${CMAKE_CURRENT_SOURCE_DIR}/board.json")
 endif()
 
@@ -34,7 +34,7 @@ include("${CMAKE_CURRENT_LIST_DIR}/ArduinoApp.cmake")
 # ----------------------------------------------------------------------------
 # HARDWARE DETECTION & VARIANT CONFIGURATION
 # ----------------------------------------------------------------------------
-_arduino_scpecific_dispatcher()# 3. Configure IDE workspace (Virtual folders, UI tweaks)
+_arduino_specific_dispatcher()# 3. Configure IDE workspace (Virtual folders, UI tweaks)
 _arduino_detect_environment("${ARDUINO_PACKAGES_ROOT}" ARDUINO_CORE_ROOT ARDUINO_CORE_PATH AVRDUDE_BIN) # Execute dynamic environment detection and load hardware configuration
 _arduino_load_config("${ARDUINO_BOARD_JSON_PATH}")
 

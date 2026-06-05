@@ -9,7 +9,7 @@ set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 # 1. Arduino Packages Root Detection (Multi-OS)
 # ----------------------------------------------------------------------------
 # If the variable is not defined by the user, or if it is left empty
-if(NOT DEFINED ARDUINO_PACKAGES_ROOT OR ARDUINO_PACKAGES_ROOT STREQUAL "")
+if(NOT ARDUINO_PACKAGES_ROOT)
     if(CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
         set(ARDUINO_PACKAGES_ROOT "$ENV{LOCALAPPDATA}/Arduino15/packages")
     elseif(CMAKE_HOST_SYSTEM_NAME MATCHES "Linux")
