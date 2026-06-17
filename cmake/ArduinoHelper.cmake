@@ -66,12 +66,12 @@ function(_arduino_load_config JSON_FILE)
     endif()
 
     # Extract basic values
-    string(JSON JSON_BOARD       ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "board")
-    string(JSON JSON_MCU         ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "mcu")
-    string(JSON JSON_F_CPU       ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "f_cpu")
-    string(JSON JSON_PORT        ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "upload_port")
-    string(JSON JSON_BAUD        ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "upload_baud")
-    string(JSON JSON_PROGRAMMER  ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "programmer")
+    string(JSON JSON_BOARD      ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "board")
+    string(JSON JSON_MCU        ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "mcu")
+    string(JSON JSON_F_CPU      ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "f_cpu")
+    string(JSON JSON_PORT       ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "upload_port")
+    string(JSON JSON_BAUD       ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "upload_baud")
+    string(JSON JSON_PROGRAMMER ERROR_VARIABLE JSON_ERROR GET ${BOARD_JSON} "programmer")
 
     # Variant fallback
     set(JSON_VARIANT "standard")
@@ -192,6 +192,7 @@ function(_arduino_gather_sources OUT_SOURCES_VAR SOURCE_DIRS)
     
     foreach(DIR ${SOURCE_DIRS})
         set(TEMP_SOURCES "")
+        file(TO_CMAKE_PATH "${DIR}" DIR)
         _arduino_append_sources(TEMP_SOURCES "${DIR}")
         list(APPEND GATHERED_FILES ${TEMP_SOURCES})
     endforeach()
