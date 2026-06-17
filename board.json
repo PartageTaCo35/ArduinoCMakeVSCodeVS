@@ -1,0 +1,14 @@
+{
+  "board": "uno",
+  "mcu": "atmega328p",
+  "variant": "standard",
+  "f_cpu": "16000000UL",
+  "upload_port": "COM3",
+  "upload_baud": "115200",
+  "programmer": "arduino",
+  "defines": [
+    "ARDUINO=10819",
+    "ARDUINO_AVR_UNO",
+    "ARDUINO_ARCH_AVR"
+  ]
+}

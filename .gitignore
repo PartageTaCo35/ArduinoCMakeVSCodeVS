@@ -1,0 +1,8 @@
+#Visual Studio 2022 & 2026
+.vs
+out
+
+#Visual Studio Code
+.vscode
+.cach
+build
