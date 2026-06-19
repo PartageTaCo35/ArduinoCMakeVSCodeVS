@@ -36,7 +36,11 @@ function(_arduino_check_library_version LIB_NAME JSON_FILE_PATH REQUIRED_VERSION
     if(EXISTS "${JSON_FILE_PATH}")
         file(READ "${JSON_FILE_PATH}" JSON_CONTENT)
         string(JSON HAS_VERSION ERROR_VARIABLE JSON_ERR TYPE "${JSON_CONTENT}" "version")
-        
+
+        if (JSON_ERR)
+                message(WARNING "${JSON_FILE_PATH} version parsing error: ${JSON_ERR}")
+        endif()
+
         if(HAS_VERSION STREQUAL "STRING")
             string(JSON INSTALLED_VERSION GET "${JSON_CONTENT}" "version")
             
@@ -63,7 +67,11 @@ function(_arduino_parse_sub_dependencies LIB_NAME JSON_FILE_PATH)
     if(EXISTS "${JSON_FILE_PATH}")
         file(READ "${JSON_FILE_PATH}" JSON_CONTENT)
         string(JSON DEPS_TYPE ERROR_VARIABLE JSON_ERR TYPE "${JSON_CONTENT}" "dependencies")
-        
+
+        if (JSON_ERR)
+                message(WARNING "${JSON_FILE_PATH} dependencies parsing error: ${JSON_ERR}")
+        endif()
+
         if(DEPS_TYPE STREQUAL "OBJECT")
             string(JSON DEPS_COUNT LENGTH "${JSON_CONTENT}" "dependencies")
             
@@ -156,13 +164,13 @@ endfunction()
 function(_arduino_prepare_library LIB_NAME LIB_PATH)
     # Put the path in a list variable so we can pass its name by reference
     list(APPEND LIB_DIRS "${LIB_PATH}")
-    
+
     # 1. Gather raw sources
     _arduino_gather_sources(LIB_SOURCES "${LIB_DIRS}")
-    
+
     # 2. Adjust (Filter out examples, extras, and sketches)
     _arduino_adjust_library_sources(LIB_SOURCES)
-    
+
     # 3. Build target (No adjustment needed for dependencies)
     _arduino_build_target("${LIB_NAME}" "STATIC" LIB_SOURCES LIB_DIRS)
 endfunction()
